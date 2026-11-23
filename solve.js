@@ -208,7 +208,8 @@ export function run(input) {
         for (;;) {
           if (s >= n) {
             if (n > seg) {
-              value += text.slice(seg, n);
+              const piece = text.slice(seg, n);
+              if (value === '') value = piece; else value += piece;
               added += n - seg;
             }
             pos = n;
@@ -218,7 +219,8 @@ export function run(input) {
           const c = text.charCodeAt(s);
           if (c === 44) {
             if (s > seg) {
-              value += text.slice(seg, s);
+              const piece = text.slice(seg, s);
+              if (value === '') value = piece; else value += piece;
               added += s - seg;
             }
             pos = s + 1;
@@ -227,7 +229,8 @@ export function run(input) {
           }
           if (c === 10) {
             if (s > seg) {
-              value += text.slice(seg, s);
+              const piece = text.slice(seg, s);
+              if (value === '') value = piece; else value += piece;
               added += s - seg;
             }
             pos = s + 1;
@@ -238,7 +241,8 @@ export function run(input) {
           if (c === 13) {
             if (s + 1 < n && text.charCodeAt(s + 1) === 10) {
               if (s > seg) {
-                value += text.slice(seg, s);
+                const piece = text.slice(seg, s);
+                if (value === '') value = piece; else value += piece;
                 added += s - seg;
               }
               pos = s + 2;
@@ -247,7 +251,8 @@ export function run(input) {
               break;
             }
             if (s > seg) {
-              value += text.slice(seg, s);
+              const piece = text.slice(seg, s);
+              if (value === '') value = piece; else value += piece;
               added += s - seg;
             }
             errors.push({ code: 'stray_cr', line: recordLine, row: recordRow });
