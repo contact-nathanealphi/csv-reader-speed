@@ -72,6 +72,7 @@ export function run(input) {
     recordRow = header && columns === null ? null : rows.length;
 
     const fields = [];
+    let fi = 0;
     let lastQuoted = false;
     // Read the record field by field. `pending` carries a field whose first
     // part is already known and whose rest still has to be read as unquoted:
@@ -164,25 +165,25 @@ export function run(input) {
           }
           if (close + 1 >= n) {
             pos = n;
-            fields.push(value);
+            fields[fi++] = value;
             break;
           }
           const c = text.charCodeAt(close + 1);
           if (c === 44) {
             pos = close + 2;
-            fields.push(value);
+            fields[fi++] = value;
             continue;
           }
           if (c === 10) {
             pos = close + 2;
             line += 1;
-            fields.push(value);
+            fields[fi++] = value;
             break;
           }
           if (c === 13 && close + 2 < n && text.charCodeAt(close + 2) === 10) {
             pos = close + 3;
             line += 1;
-            fields.push(value);
+            fields[fi++] = value;
             break;
           }
           // What follows the closing quote is appended as it stands, up to
@@ -264,7 +265,7 @@ export function run(input) {
         }
         if (jc && added > 0) errors.push({ code: 'quote_junk', line: recordLine, row: recordRow });
       }
-      fields.push(value);
+      fields[fi++] = value;
       if (ended !== COMMA) break;
     }
 
@@ -282,7 +283,7 @@ export function run(input) {
     } else if (fields.length > width) {
       errors.push({ code: 'long_row', line: recordLine, row: recordRow, extra: fields.splice(width) });
     }
-    rows.push(fields);
+    rows[rows.length] = fields;
   }
   return { columns: header ? (columns ?? []) : null, rows, errors };
 }
